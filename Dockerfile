@@ -1,6 +1,17 @@
-FROM eclipse-temurin:17
+# Etapa 1: Build da aplicação
+FROM maven:3.8.6-amazoncorretto-17 AS build
 LABEL maintainer="admfazzolo@gmail.com"
+
 WORKDIR /app
-COPY target/itensPregao-0.0.1-SNAPSHOT.jar /app/consultalicitacao.jar
-ENTRYPOINT ["java", "-jar", "consultalicitacao.jar"]
+COPY . .
+RUN mvn clean package -DskipTests
+
+FROM openjdk:17-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    fontconfig \
+    libfreetype6 \
+    && rm -rf /var/lib/apt/lists/*
+COPY --from=build /app/target/*.jar /app/consultalicitacao.jar
 EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/consultalicitacao.jar"]
