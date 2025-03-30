@@ -3,12 +3,19 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
 }
+
 h1 {
     text-align: center;
     color: #333;
     margin-top: 20px;
 }
+
 form {
     max-width: 600px;
     margin: 20px auto;
@@ -17,12 +24,14 @@ form {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
     color: #555;
 }
+
 input, select {
     width: 100%;
     padding: 10px;
@@ -32,6 +41,7 @@ input, select {
     box-sizing: border-box;
     font-size: 16px;
 }
+
 button {
     width: 100%;
     padding: 12px;
@@ -42,6 +52,12 @@ button {
     font-size: 16px;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #45a049;
+}
+footer {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
 }
