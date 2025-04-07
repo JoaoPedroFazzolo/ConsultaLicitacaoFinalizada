@@ -38,14 +38,22 @@ public class CompraController {
                     @ApiResponse(responseCode = "500", description = "Erro ao gerar o arquivo Excel")
             })
     @GetMapping("/gerarExcel")
-    public ResponseEntity<byte[]> gerarExcel(@RequestParam String uasg, @RequestParam String tipo, @RequestParam String pregao) throws IOException{
-        String idCompra = uasg + tipo + pregao;
+    public ResponseEntity<byte[]> gerarExcel(@RequestParam String uasg, @RequestParam String tipo, @RequestParam String processo) throws IOException{
+        uasg = uasg.replaceAll(" ", "");
+        processo = processo.replaceAll(" ", "").replaceAll("/","");
+        String idCompra = uasg + tipo + processo;
         CompraResponseDTO compraResponseDTO = compraService.obterDadosCompra(idCompra);
-        logger.info("UASG: " + uasg + " Tipo: " + tipo + " Pregao: " + pregao);
+        logger.info("UASG: " + uasg + " Tipo: " + tipo + " Processo: " + processo);
         byte[] excel = excelService.gerarExcel(compraResponseDTO);
 
+        if (excel == null || excel.length == 0) {
+            logger.error("Falha na criação da planilha.");
+            return ResponseEntity.internalServerError().build();
+        }
+
+
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=compra_" + pregao + ".xlsx");
+        headers.add("Content-Disposition", "attachment; filename=compra_" + processo + ".xlsx");
         logger.info("planilha criado com sucesso");
         return  ResponseEntity.ok().headers(headers).body(excel);
     }
