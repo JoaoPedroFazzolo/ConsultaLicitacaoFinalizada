@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const blob = await response.blob();
 
             const contentDisposition = response.headers.get("Content-Disposition");
-            let filename = "relatorio.xlsx";
+            let filename
             if (contentDisposition && contentDisposition.includes("filename=")) {
                 filename = contentDisposition
                     .split("filename=")[1]
