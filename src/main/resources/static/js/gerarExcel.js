@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
 
         button.disabled = true;
-        button.textContent = "Gerando..."; // <- troca o texto
+        button.textContent = "Gerando...";
         mensagem.style.display = "block";
 
         const params = new URLSearchParams(new FormData(form));
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Erro ao gerar a planilha.");
         } finally {
             button.disabled = false;
-            button.textContent = "Gerar Excel"; // <- volta ao texto original
+            button.textContent = "Gerar Excel";
             mensagem.style.display = "none";
         }
     });
