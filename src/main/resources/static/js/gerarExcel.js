@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: "GET"
             });
 
-            if (!response.ok) throw new Error("Erro ao gerar planilha");
+            if (!response.ok) throw new Error("Erro ao gerar planilha, confirme os dados inseridos");
 
             const blob = await response.blob();
 
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
             link.remove();
             window.URL.revokeObjectURL(url);
         } catch (err) {
-            alert("Erro ao gerar a planilha.");
+            alert("Erro ao gerar a planilha, confirme os dados inseridos.");
         } finally {
             button.disabled = false;
             button.textContent = "Gerar Excel";
