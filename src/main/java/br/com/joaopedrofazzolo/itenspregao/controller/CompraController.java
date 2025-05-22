@@ -55,6 +55,11 @@ public class CompraController {
                     .body("Não foi possível gerar a planilha: dados da licitação não encontrados".getBytes());
         }
 
+        int quantidadeItens = (compraResponseDTO.getResultado() != null) ? compraResponseDTO.getResultado().size() : 0;
+        logger.info("Valores antes de registrar: uasg={}, tipo={}, processo={}, quantidadeItens={}",
+                uasg, tipo, processo, quantidadeItens);
+        compraService.registrarConsulta(uasg, tipo, processo, quantidadeItens);
+
         byte[] excel = excelService.gerarExcel(compraResponseDTO);
 
 
