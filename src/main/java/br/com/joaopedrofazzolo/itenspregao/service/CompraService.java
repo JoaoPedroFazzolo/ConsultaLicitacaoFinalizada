@@ -3,15 +3,12 @@ package br.com.joaopedrofazzolo.itenspregao.service;
 import br.com.joaopedrofazzolo.itenspregao.dto.CompraResponseDTO;
 import br.com.joaopedrofazzolo.itenspregao.model.ConsultaLog;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class CompraService {
