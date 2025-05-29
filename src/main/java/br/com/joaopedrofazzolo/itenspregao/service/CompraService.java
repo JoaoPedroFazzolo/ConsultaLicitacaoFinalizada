@@ -20,7 +20,7 @@ public class CompraService {
     public CompraResponseDTO obterDadosCompra(String idCompra) {
         RestTemplate restTemplate = new RestTemplate();
         String url = API_URL + "?tipo=idCompra&codigo=" + idCompra;
-    
+        logger.info("URL: " + url);
 
         CompraResponseDTO response = restTemplate.getForObject(url, CompraResponseDTO.class);
 
@@ -33,8 +33,6 @@ public class CompraService {
             Firestore db = FirestoreClient.getFirestore();
             logger.info("Firestore instanciado com sucesso");
             ConsultaLog log = new ConsultaLog(uasg, tipo, processo, quantidadeItens);
-            logger.info("ConsultaLog criado: uasg={}, tipo={}, processo={}, quantidadeItens={}, timestamp={}",
-                    log.getUasg(), log.getTipo(), log.getProcesso(), log.getQuantidadeItens(), log.getTimestamp());
             db.collection("consultas").add(log).get();
             logger.info("Consulta registrada: uasg={}, tipo={}, processo={}, quantidadeItens={}",
                     uasg, tipo, processo, quantidadeItens);
