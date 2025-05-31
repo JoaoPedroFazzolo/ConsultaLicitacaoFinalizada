@@ -10,44 +10,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const textoOriginalBotao = btnSubmit ? btnSubmit.textContent : "Gerar Excel";
 
+    if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
+        console.error("Erro: Um ou mais elementos do DOM não foram encontrados.");
+        return;
+    }
+
     const showModal = (title, message) => {
-        if (!feedbackModal || !modalTitle || !modalMessage) {
-            console.error("Erro: Elementos do modal não encontrados no DOM.");
-            return;
-        }
         modalTitle.textContent = title;
         modalMessage.textContent = message;
         feedbackModal.style.display = "block";
     };
 
     const hideModal = () => {
-        if (!feedbackModal) return;
         feedbackModal.style.display = "none";
     };
 
-    if (feedbackModal) {
-        closeButtonModal.addEventListener("click", hideModal);
-        modalOkButton.addEventListener("click", hideModal);
+    closeButtonModal.addEventListener("click", hideModal);
+    modalOkButton.addEventListener("click", hideModal);
 
-        window.addEventListener("click", (event) => {
-            if (event.target === feedbackModal) {
-                hideModal();
-            }
-        });
-    }
+    window.addEventListener("click", (event) => {
+        if (event.target === feedbackModal) {
+            hideModal();
+        }
+    });
 
     formDownload.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if (btnSubmit) {
-            btnSubmit.disabled = true;
-            btnSubmit.textContent = "Gerando planilha, aguarde...";
-        }
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Gerando planilha, aguarde...";
 
         const params = new URLSearchParams(new FormData(formDownload));
 
         try {
-            const response = await fetch(`/api/gerarExcel?${params.toString()}`, {
+            const response = await fetch(`/gerarExcel?${params.toString()}`, {
                 method: "GET"
             });
 
@@ -83,10 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Erro na operação:", error);
             showModal("Ocorreu um Erro", error.message);
         } finally {
-            if (btnSubmit) {
-                btnSubmit.disabled = false;
-                btnSubmit.textContent = textoOriginalBotao;
-            }
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = textoOriginalBotao;
         }
     });
 });
