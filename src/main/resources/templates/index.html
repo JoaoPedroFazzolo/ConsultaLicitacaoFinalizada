@@ -2,53 +2,77 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de licitação</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/css/styles.css">
     <script src="/js/gerarExcel.js" defer></script>
 </head>
 <body>
 
-<h1>Relatório de licitação</h1>
+<main class="container">
+    <h1>Relatório de licitação</h1>
 
-<form id="formDownload">
-    <label for="uasg">UASG (120071):</label>
-    <input type="text" id="uasg" name="uasg" required><br>
+    <form id="formDownload">
+        <div class="form-group">
+            <label for="uasg">UASG (ex: 120071)</label>
+            <input type="text" id="uasg" name="uasg" placeholder="Digite o código da UASG" required>
+        </div>
 
-    <label for="tipo">Tipo:</label>
-    <select id="tipo" name="tipo" required>
-        <option value="05">PREGÃO </option>
-        <option value="06">DISPENSA DE LICITAÇÃO</option>
-<!--        <option value="01">CONVITE</option>-->
-<!--        <option value="02">TOMADA DE PREÇOS</option>-->
-<!--        <option value="03">CONCORRÊNCIA</option>-->
-<!--        <option value="04">CONCORRÊNCIA INTERNACIONAL</option>-->
-<!--        <option value="07">INEXIGIBILIDADE DE LICITAÇÃO</option>-->
-<!--        <option value="12">CREDENCIAMENTO</option>-->
-<!--        <option value="20">CONCURSO</option>-->
-<!--        <option value="22">TOMADA DE PREÇOS POR TÉCNICA E PREÇO</option>-->
-<!--        <option value="33">CONCORRÊNCIA POR TÉCNICA E PREÇO</option>-->
-<!--        <option value="44">CONCORRÊNCIA INTERNACIONAL POR TÉCNICA E PREÇO</option>-->
-<!--        <option value="57">CONVÊNIO</option>-->
-    </select><br>
+        <div class="form-group">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" name="tipo" required>
+                <option value="05">PREGÃO</option>
+                <option value="06">DISPENSA DE LICITAÇÃO</option>
+                <!--        <option value="01">CONVITE</option>-->
+                <!--        <option value="02">TOMADA DE PREÇOS</option>-->
+                <!--        <option value="03">CONCORRÊNCIA</option>-->
+                <!--        <option value="04">CONCORRÊNCIA INTERNACIONAL</option>-->
+                <!--        <option value="07">INEXIGIBILIDADE DE LICITAÇÃO</option>-->
+                <!--        <option value="12">CREDENCIAMENTO</option>-->
+                <!--        <option value="20">CONCURSO</option>-->
+                <!--        <option value="22">TOMADA DE PREÇOS POR TÉCNICA E PREÇO</option>-->
+                <!--        <option value="33">CONCORRÊNCIA POR TÉCNICA E PREÇO</option>-->
+                <!--        <option value="44">CONCORRÊNCIA INTERNACIONAL POR TÉCNICA E PREÇO</option>-->
+                <!--        <option value="57">CONVÊNIO</option>-->
+            </select>
+        </div>
 
-    <label for="processo">Nº do processo (900412024):</label>
-    <input type="text" id="processo" name="processo" required><br>
+        <div class="form-group">
+            <label for="processo">Nº do processo</label>
+            <input type="text" id="processo" name="processo" placeholder="900412024" required>
+        </div>
 
-    <button type="submit" id="btnSubmit">Gerar Excel para SILOMS</button>
-</form>
+        <button type="submit" id="btnSubmit">Gerar Excel para SILOMS</button>
+    </form>
 
-<p id="mensagem" style="display:none;">
-    Gerando planilha, aguarde...
-</p>
+    <div class="support-section">
+        <p>Se o sistema tem te ajudado, considere apoiar o desenvolvimento com qualquer valor.</p>
+        <p>Chave PIX: <a href="mailto:admfazzolo@gmail.com">admfazzolo@gmail.com</a></p>
+    </div>
 
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+            <div class="modal-buttons">
+                <button id="modal-ok-button">OK</button>
+            </div>
+        </div>
+    </div>
+</main>
 
 <footer>
     <p>Feito por João Pedro Oliveira Fazzolo</p>
     <p>Sistema em fase de testes, podendo ocorrer discrepâncias entre a tabela gerada e os dados do processo no compras.gov</p>
-    <p>Demais tipos de contratações em desenvolviemnto</p>
-    <p>Email: <a href="mailto:admfazzolo@gmail.com">admfazzolo@gmail.com</a></p>
     <p>Fonte: <a href="https://www.gov.br/compras/pt-br/cidadao/compras-publicas-dados-abertos">Compras Públicas em Dados Abertos</a></p>
 </footer>
+
 
 </body>
 </html>

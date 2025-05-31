@@ -1,28 +1,71 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("formDownload");
-    const button = document.getElementById("btnSubmit");
-    const mensagem = document.getElementById("mensagem");
+    const formDownload = document.getElementById("formDownload");
+    const btnSubmit = document.getElementById("btnSubmit");
+    const mensagemCarregamento = document.getElementById("mensagem");
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+    const feedbackModal = document.getElementById("feedbackModal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalMessage = document.getElementById("modal-message");
+    const closeButtonModal = document.querySelector(".close-button");
+    const modalOkButton = document.getElementById("modal-ok-button");
 
-        button.disabled = true;
-        button.textContent = "Gerando...";
-        mensagem.style.display = "block";
+    const textoOriginalBotao = btnSubmit ? btnSubmit.textContent : "Gerar Excel";
 
-        const params = new URLSearchParams(new FormData(form));
+
+    const showModal = (title, message) => {
+        if (!feedbackModal || !modalTitle || !modalMessage) {
+            console.error("Erro: Elementos do modal não encontrados no DOM.");
+            return;
+        }
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        feedbackModal.style.display = "block";
+    };
+
+    const hideModal = () => {
+        if (!feedbackModal) return;
+        feedbackModal.style.display = "none";
+    };
+
+    if (feedbackModal) {
+        closeButtonModal.addEventListener("click", hideModal);
+        modalOkButton.addEventListener("click", hideModal);
+
+        window.addEventListener("click", (event) => {
+            if (event.target === feedbackModal) {
+                hideModal();
+            }
+        });
+    }
+
+
+    formDownload.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "Gerando planilha, aguarde...";
+        }
+        if (mensagemCarregamento) {
+            mensagemCarregamento.style.display = "block";
+        }
+
+        const params = new URLSearchParams(new FormData(formDownload));
 
         try {
             const response = await fetch(`/gerarExcel?${params.toString()}`, {
-                method: "GET"
+                method: "GET" // Método HTTP para a requisição
             });
 
-            if (!response.ok) throw new Error("Erro ao gerar planilha, confirme os dados inseridos");
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || "Ocorreu um erro ao gerar a planilha. Por favor, confirme os dados inseridos e tente novamente.");
+            }
 
             const blob = await response.blob();
-
             const contentDisposition = response.headers.get("Content-Disposition");
-            let filename
+
+            let filename = "relatorio.xlsx"; // Nome de arquivo padrão
             if (contentDisposition && contentDisposition.includes("filename=")) {
                 filename = contentDisposition
                     .split("filename=")[1]
@@ -34,16 +77,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const link = document.createElement("a");
             link.href = url;
             link.download = filename;
+
             document.body.appendChild(link);
             link.click();
             link.remove();
             window.URL.revokeObjectURL(url);
-        } catch (err) {
-            alert("Erro ao gerar a planilha, confirme os dados inseridos.");
+
+            showModal("Sucesso!", "Sua planilha foi gerada e o download iniciado. Verifique sua pasta de downloads.");
+
+        } catch (error) {
+            console.error("Erro na operação:", error);
+            showModal("Ocorreu um Erro", error.message);
         } finally {
-            button.disabled = false;
-            button.textContent = "Gerar Excel";
-            mensagem.style.display = "none";
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginalBotao;
+            }
+            if (mensagemCarregamento) {
+                mensagemCarregamento.style.display = "none";
+            }
         }
     });
 });
