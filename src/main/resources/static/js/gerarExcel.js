@@ -8,33 +8,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButtonModal = document.querySelector(".close-button");
     const modalOkButton = document.getElementById("modal-ok-button");
 
-    const textoOriginalBotao = btnSubmit ? btnSubmit.textContent : "Gerar Excel";
+    // Verifica se os elementos necessários estão presentes
+    if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
+        console.error("Erro: Um ou mais elementos do formulário ou modal não foram encontrados no DOM.");
+        return;
+    }
+
+    const textoOriginalBotao = btnSubmit.textContent || "Gerar Excel";
 
     const showModal = (title, message) => {
-        if (!feedbackModal || !modalTitle || !modalMessage) {
+        if (!modalTitle || !modalMessage) {
             console.error("Erro: Elementos do modal não encontrados no DOM.");
             return;
         }
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
+        modalTitle.textContent = title || "Erro";
+        modalMessage.textContent = message || "Mensagem não disponível.";
         feedbackModal.style.display = "block";
     };
 
     const hideModal = () => {
-        if (!feedbackModal) return;
         feedbackModal.style.display = "none";
     };
 
-    if (feedbackModal) {
-        closeButtonModal.addEventListener("click", hideModal);
-        modalOkButton.addEventListener("click", hideModal);
+    closeButtonModal.addEventListener("click", hideModal);
+    modalOkButton.addEventListener("click", hideModal);
 
-        window.addEventListener("click", (event) => {
-            if (event.target === feedbackModal) {
-                hideModal();
-            }
-        });
-    }
+    window.addEventListener("click", (event) => {
+        if (event.target === feedbackModal) {
+            hideModal();
+        }
+    });
 
     formDownload.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -47,13 +50,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(new FormData(formDownload));
 
         try {
-            const response = await fetch(`/api/gerarExcel?${params.toString()}`, {
-                method: "GET"
+            const response = await fetch(`/gerarExcel?${params.toString()}`, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                }
             });
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(errorText || "Ocorreu um erro ao gerar a planilha. Por favor, confirme os dados inseridos e tente novamente.");
+                throw new Error(errorText.length > 0 ? errorText : "Ocorreu um erro ao gerar a planilha. Por favor, confirme os dados inseridos e tente novamente.");
             }
 
             const blob = await response.blob();
@@ -65,6 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     .split("filename=")[1]
                     .replace(/['"]/g, "")
                     .trim();
+            } else {
+                filename = `relatorio_${new Date().toISOString().split('T')[0]}.xlsx`;
             }
 
             const url = window.URL.createObjectURL(blob);
@@ -81,7 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (error) {
             console.error("Erro na operação:", error);
-            showModal("Ocorreu um Erro", error.message);
+            const errorMessage = error.message || "Erro desconhecido ao processar a solicitação.";
+            showModal("Ocorreu um Erro", errorMessage);
         } finally {
             if (btnSubmit) {
                 btnSubmit.disabled = false;
