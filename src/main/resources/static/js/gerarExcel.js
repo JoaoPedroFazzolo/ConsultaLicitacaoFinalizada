@@ -16,13 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const textoOriginalBotao = btnSubmit.textContent || "Gerar Excel";
 
+    if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
+        console.error("Erro: Um ou mais elementos do DOM não foram encontrados.");
+        return;
+    }
+
     const showModal = (title, message) => {
-        if (!modalTitle || !modalMessage) {
-            console.error("Erro: Elementos do modal não encontrados no DOM.");
-            return;
-        }
-        modalTitle.textContent = title || "Erro";
-        modalMessage.textContent = message || "Mensagem não disponível.";
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+
         feedbackModal.style.display = "block";
     };
 
@@ -42,19 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
     formDownload.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if (btnSubmit) {
-            btnSubmit.disabled = true;
-            btnSubmit.textContent = "Gerando planilha, aguarde...";
-        }
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Gerando planilha, aguarde...";
 
         const params = new URLSearchParams(new FormData(formDownload));
 
         try {
             const response = await fetch(`/gerarExcel?${params.toString()}`, {
-                method: "GET",
-                headers: {
-                    "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                }
+                method: "GET"
+
             });
 
             if (!response.ok) {
@@ -92,10 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const errorMessage = error.message || "Erro desconhecido ao processar a solicitação.";
             showModal("Ocorreu um Erro", errorMessage);
         } finally {
-            if (btnSubmit) {
-                btnSubmit.disabled = false;
-                btnSubmit.textContent = textoOriginalBotao;
-            }
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = textoOriginalBotao;
         }
     });
 });
