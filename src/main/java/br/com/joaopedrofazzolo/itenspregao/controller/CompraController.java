@@ -40,6 +40,7 @@ public class CompraController {
             })
     @GetMapping("/gerarExcel")
     public ResponseEntity<byte[]> gerarExcel(@RequestParam String uasg, @RequestParam String tipo, @RequestParam String processo) throws IOException{
+        logger.info("Recebida solicitação para /gerarExcel com parâmetros: uasg={}, tipo={}, processo={}", uasg, tipo, processo);
         uasg = uasg.replaceAll(" ", "");
         processo = processo.replaceAll(" ", "").replaceAll("/","");
         String idCompra = uasg + tipo + processo;

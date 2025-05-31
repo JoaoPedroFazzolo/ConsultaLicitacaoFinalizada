@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const textoOriginalBotao = btnSubmit ? btnSubmit.textContent : "Gerar Excel";
 
-    // --- Funções Auxiliares do Modal ---
     const showModal = (title, message) => {
         if (!feedbackModal || !modalTitle || !modalMessage) {
             console.error("Erro: Elementos do modal não encontrados no DOM.");
@@ -48,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(new FormData(formDownload));
 
         try {
-            const response = await fetch(`/gerarExcel?${params.toString()}`, {
+            const response = await fetch(`/api/gerarExcel?${params.toString()}`, {
                 method: "GET"
             });
 
