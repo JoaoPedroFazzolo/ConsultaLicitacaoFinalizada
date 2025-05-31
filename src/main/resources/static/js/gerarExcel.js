@@ -8,7 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButtonModal = document.querySelector(".close-button");
     const modalOkButton = document.getElementById("modal-ok-button");
 
-    const textoOriginalBotao = btnSubmit ? btnSubmit.textContent : "Gerar Excel";
+    // Verifica se os elementos necessários estão presentes
+    if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
+        console.error("Erro: Um ou mais elementos do formulário ou modal não foram encontrados no DOM.");
+        return;
+    }
+
+    const textoOriginalBotao = btnSubmit.textContent || "Gerar Excel";
 
     if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
         console.error("Erro: Um ou mais elementos do DOM não foram encontrados.");
@@ -18,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const showModal = (title, message) => {
         modalTitle.textContent = title;
         modalMessage.textContent = message;
+
         feedbackModal.style.display = "block";
     };
 
@@ -45,11 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch(`/gerarExcel?${params.toString()}`, {
                 method: "GET"
+
             });
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(errorText || "Ocorreu um erro ao gerar a planilha. Por favor, confirme os dados inseridos e tente novamente.");
+                throw new Error(errorText.length > 0 ? errorText : "Ocorreu um erro ao gerar a planilha. Por favor, confirme os dados inseridos e tente novamente.");
             }
 
             const blob = await response.blob();
@@ -61,6 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     .split("filename=")[1]
                     .replace(/['"]/g, "")
                     .trim();
+            } else {
+                filename = `relatorio_${new Date().toISOString().split('T')[0]}.xlsx`;
             }
 
             const url = window.URL.createObjectURL(blob);
@@ -77,7 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (error) {
             console.error("Erro na operação:", error);
-            showModal("Ocorreu um Erro", error.message);
+            const errorMessage = error.message || "Erro desconhecido ao processar a solicitação.";
+            showModal("Ocorreu um Erro", errorMessage);
         } finally {
             btnSubmit.disabled = false;
             btnSubmit.textContent = textoOriginalBotao;
