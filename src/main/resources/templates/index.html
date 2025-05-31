@@ -2,13 +2,13 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Gerar Excel</title>
+    <title>Relatório de licitação</title>
     <link rel="stylesheet" href="/css/styles.css">
     <script src="/js/gerarExcel.js" defer></script>
 </head>
 <body>
 
-<h1>Gerar Excel</h1>
+<h1>Relatório de licitação</h1>
 
 <form id="formDownload">
     <label for="uasg">UASG (120071):</label>
@@ -16,25 +16,25 @@
 
     <label for="tipo">Tipo:</label>
     <select id="tipo" name="tipo" required>
-        <option value="05">PREGÃO</option>
+        <option value="05">PREGÃO </option>
         <option value="06">DISPENSA DE LICITAÇÃO</option>
-        <option value="01">CONVITE</option>
-        <option value="02">TOMADA DE PREÇOS</option>
-        <option value="03">CONCORRÊNCIA</option>
-        <option value="04">CONCORRÊNCIA INTERNACIONAL</option>
-        <option value="07">INEXIGIBILIDADE DE LICITAÇÃO</option>
-        <option value="12">CREDENCIAMENTO</option>
-        <option value="20">CONCURSO</option>
-        <option value="22">TOMADA DE PREÇOS POR TÉCNICA E PREÇO</option>
-        <option value="33">CONCORRÊNCIA POR TÉCNICA E PREÇO</option>
-        <option value="44">CONCORRÊNCIA INTERNACIONAL POR TÉCNICA E PREÇO</option>
-        <option value="57">CONVÊNIO</option>
+<!--        <option value="01">CONVITE</option>-->
+<!--        <option value="02">TOMADA DE PREÇOS</option>-->
+<!--        <option value="03">CONCORRÊNCIA</option>-->
+<!--        <option value="04">CONCORRÊNCIA INTERNACIONAL</option>-->
+<!--        <option value="07">INEXIGIBILIDADE DE LICITAÇÃO</option>-->
+<!--        <option value="12">CREDENCIAMENTO</option>-->
+<!--        <option value="20">CONCURSO</option>-->
+<!--        <option value="22">TOMADA DE PREÇOS POR TÉCNICA E PREÇO</option>-->
+<!--        <option value="33">CONCORRÊNCIA POR TÉCNICA E PREÇO</option>-->
+<!--        <option value="44">CONCORRÊNCIA INTERNACIONAL POR TÉCNICA E PREÇO</option>-->
+<!--        <option value="57">CONVÊNIO</option>-->
     </select><br>
 
     <label for="processo">Nº do processo (900412024):</label>
     <input type="text" id="processo" name="processo" required><br>
 
-    <button type="submit" id="btnSubmit">Gerar Excel</button>
+    <button type="submit" id="btnSubmit">Gerar Excel para SILOMS</button>
 </form>
 
 <p id="mensagem" style="display:none;">
@@ -45,8 +45,8 @@
 <footer>
     <p>Feito por João Pedro Oliveira Fazzolo</p>
     <p>Sistema em fase de testes, podendo ocorrer discrepâncias entre a tabela gerada e os dados do processo no compras.gov</p>
+    <p>Demais tipos de contratações em desenvolviemnto</p>
     <p>Email: <a href="mailto:admfazzolo@gmail.com">admfazzolo@gmail.com</a></p>
-    <p>Repositório: <a href="https://github.com/JoaoPedroFazzolo/ConsultaLicitacaoFinalizada">GitHub</a></p>
     <p>Fonte: <a href="https://www.gov.br/compras/pt-br/cidadao/compras-publicas-dados-abertos">Compras Públicas em Dados Abertos</a></p>
 </footer>
 

@@ -3,6 +3,7 @@ package br.com.joaopedrofazzolo.itenspregao.service;
 import br.com.joaopedrofazzolo.itenspregao.model.CompraItemModel;
 import br.com.joaopedrofazzolo.itenspregao.dto.CompraResponseDTO;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,12 +56,16 @@ public class ExcelService {
                 row.createCell(0).setCellValue("");
                 row.createCell(1).setCellValue(item.getNumeroItemPncp());
                 row.createCell(2).setCellValue("");
-                row.createCell(3).setCellValue(item.getCodFornecedor() != null ? item.getCodFornecedor() : "");
+                row.createCell(3).setCellValue(item.getCodFornecedor() != null ? item.getCodFornecedor() : "Item deserto/fracassado ou sem retorno na base consultada");
                 row.createCell(4).setCellValue("");
                 row.createCell(5).setCellValue(item.getQuantidadeResultado() > 0 ? item.getQuantidadeResultado() : 0);
                 row.createCell(6).setCellValue("");
-                row.createCell(7).setCellValue(formatarFloat(item.getValorUnitarioResultado() > 0 ? item.getValorUnitarioResultado() : 0));
-                row.createCell(8).setCellValue(formatarFloat(item.getValorTotalResultado() > 0 ? item.getValorTotalResultado() : 0));
+                row.createCell(7).setCellValue(
+                        new BigDecimal(item.getValorUnitarioResultado()).setScale(4, RoundingMode.HALF_UP).doubleValue()
+                );
+                row.createCell(8).setCellValue(
+                        new BigDecimal(item.getValorTotalResultado()).setScale(4, RoundingMode.HALF_UP).doubleValue()
+                );
                 if (!(item.getSituacaoCompraItemNome().equals("Deserto") ||
                         item.getSituacaoCompraItemNome().equals("Fracassado") ||
                         item.getSituacaoCompraItemNome().equals("Em andamento") ||
@@ -90,9 +95,5 @@ public class ExcelService {
             log.error("Erro inesperado ao gerar planilha Excel", e);
             return null;
         }
-    }
-
-    private double formatarFloat(float valor) {
-        return new BigDecimal(valor).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 }
