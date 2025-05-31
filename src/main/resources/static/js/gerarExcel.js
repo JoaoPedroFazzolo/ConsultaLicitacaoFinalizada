@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const formDownload = document.getElementById("formDownload");
     const btnSubmit = document.getElementById("btnSubmit");
-    const mensagemCarregamento = document.getElementById("mensagem");
 
     const feedbackModal = document.getElementById("feedbackModal");
     const modalTitle = document.getElementById("modal-title");
@@ -11,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const textoOriginalBotao = btnSubmit ? btnSubmit.textContent : "Gerar Excel";
 
-
+    // --- Funções Auxiliares do Modal ---
     const showModal = (title, message) => {
         if (!feedbackModal || !modalTitle || !modalMessage) {
             console.error("Erro: Elementos do modal não encontrados no DOM.");
@@ -38,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
     formDownload.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -46,15 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
             btnSubmit.disabled = true;
             btnSubmit.textContent = "Gerando planilha, aguarde...";
         }
-        if (mensagemCarregamento) {
-            mensagemCarregamento.style.display = "block";
-        }
 
         const params = new URLSearchParams(new FormData(formDownload));
 
         try {
             const response = await fetch(`/gerarExcel?${params.toString()}`, {
-                method: "GET" // Método HTTP para a requisição
+                method: "GET"
             });
 
             if (!response.ok) {
@@ -65,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const blob = await response.blob();
             const contentDisposition = response.headers.get("Content-Disposition");
 
-            let filename = "relatorio.xlsx"; // Nome de arquivo padrão
+            let filename = "relatorio.xlsx";
             if (contentDisposition && contentDisposition.includes("filename=")) {
                 filename = contentDisposition
                     .split("filename=")[1]
@@ -92,9 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (btnSubmit) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = textoOriginalBotao;
-            }
-            if (mensagemCarregamento) {
-                mensagemCarregamento.style.display = "none";
             }
         }
     });

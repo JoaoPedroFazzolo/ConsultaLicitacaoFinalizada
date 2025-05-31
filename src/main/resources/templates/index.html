@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de licitação</title>
+    <title>Relatório de Licitação - Compras.gov</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/styles.css">
-    <script src="./js/gerarExcel.js" defer></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/gerarExcel.js" defer></script>
 </head>
 <body>
 
 <main class="container">
-    <h1>Relatório de licitação</h1>
+    <h1>Gerador de Relatório de Licitação</h1>
 
     <form id="formDownload">
         <div class="form-group">
@@ -24,30 +24,19 @@
         </div>
 
         <div class="form-group">
-            <label for="tipo">Tipo</label>
+            <label for="tipo">Tipo de Licitação</label>
             <select id="tipo" name="tipo" required>
                 <option value="05">PREGÃO</option>
                 <option value="06">DISPENSA DE LICITAÇÃO</option>
-                <!--        <option value="01">CONVITE</option>-->
-                <!--        <option value="02">TOMADA DE PREÇOS</option>-->
-                <!--        <option value="03">CONCORRÊNCIA</option>-->
-                <!--        <option value="04">CONCORRÊNCIA INTERNACIONAL</option>-->
-                <!--        <option value="07">INEXIGIBILIDADE DE LICITAÇÃO</option>-->
-                <!--        <option value="12">CREDENCIAMENTO</option>-->
-                <!--        <option value="20">CONCURSO</option>-->
-                <!--        <option value="22">TOMADA DE PREÇOS POR TÉCNICA E PREÇO</option>-->
-                <!--        <option value="33">CONCORRÊNCIA POR TÉCNICA E PREÇO</option>-->
-                <!--        <option value="44">CONCORRÊNCIA INTERNACIONAL POR TÉCNICA E PREÇO</option>-->
-                <!--        <option value="57">CONVÊNIO</option>-->
             </select>
         </div>
 
         <div class="form-group">
-            <label for="processo">Nº do processo</label>
-            <input type="text" id="processo" name="processo" placeholder="900412024" required>
+            <label for="processo">Nº do Processo (ex: 900412024)</label>
+            <input type="text" id="processo" name="processo" placeholder="Digite o número do processo" required>
         </div>
 
-        <button type="submit" id="btnSubmit">Gerar Excel para SILOMS</button>
+        <button type="submit" id="btnSubmit">Gerar Planilha Excel para SILOMS</button>
     </form>
 
     <div class="support-section">
@@ -68,11 +57,10 @@
 </main>
 
 <footer>
-    <p>Feito por João Pedro Oliveira Fazzolo</p>
-    <p>Sistema em fase de testes, podendo ocorrer discrepâncias entre a tabela gerada e os dados do processo no compras.gov</p>
-    <p>Fonte: <a href="https://www.gov.br/compras/pt-br/cidadao/compras-publicas-dados-abertos">Compras Públicas em Dados Abertos</a></p>
+    <p>Desenvolvido por João Pedro Oliveira Fazzolo</p>
+    <p>Este sistema está em fase de testes. Podem ocorrer pequenas discrepâncias entre os dados gerados e o portal Compras.gov.</p>
+    <p>Fonte dos dados: <a href="https://www.gov.br/compras/pt-br/cidadao/compras-publicas-dados-abertos" target="_blank" rel="noopener noreferrer">Compras Públicas em Dados Abertos - gov.br</a></p>
 </footer>
-
 
 </body>
 </html>
