@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop  # Adicionado para permitir deploy também na develop
 
 jobs:
   build:
