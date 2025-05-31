@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButtonModal = document.querySelector(".close-button");
     const modalOkButton = document.getElementById("modal-ok-button");
 
-    // Verifica se os elementos necessários estão presentes
     if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
         console.error("Erro: Um ou mais elementos do formulário ou modal não foram encontrados no DOM.");
         return;
