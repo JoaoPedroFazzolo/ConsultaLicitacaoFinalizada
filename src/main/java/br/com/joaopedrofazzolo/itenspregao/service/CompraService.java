@@ -1,7 +1,7 @@
 package br.com.joaopedrofazzolo.itenspregao.service;
 
 import br.com.joaopedrofazzolo.itenspregao.dto.CompraResponseDTO;
-import br.com.joaopedrofazzolo.itenspregao.model.ConsultaLog;
+import br.com.joaopedrofazzolo.itenspregao.model.ConsultaLogModel;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class CompraService {
                     uasg, tipo, processo, quantidadeItens);
             Firestore db = FirestoreClient.getFirestore();
             logger.info("Firestore instanciado com sucesso");
-            ConsultaLog log = new ConsultaLog(uasg, tipo, processo, quantidadeItens);
+            ConsultaLogModel log = new ConsultaLogModel(uasg, tipo, processo, quantidadeItens);
             db.collection("consultas").add(log).get();
             logger.info("Consulta registrada: uasg={}, tipo={}, processo={}, quantidadeItens={}",
                     uasg, tipo, processo, quantidadeItens);

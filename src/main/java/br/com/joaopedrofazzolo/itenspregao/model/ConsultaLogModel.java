@@ -3,23 +3,25 @@ package br.com.joaopedrofazzolo.itenspregao.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
-public class ConsultaLog {
+public class ConsultaLogModel {
     private String uasg;
     private String tipo;
     private String processo;
     private int quantidadeItens;
-    private long timestamp;
+    private String timestamp;
 
-    public ConsultaLog() {
+    public ConsultaLogModel() {
     }
 
-    public ConsultaLog(String uasg, String tipo, String processo, int quantidadeItens) {
+    public ConsultaLogModel(String uasg, String tipo, String processo, int quantidadeItens) {
         this.uasg = uasg;
         this.tipo = tipo;
         this.processo = processo;
         this.quantidadeItens = quantidadeItens;
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = LocalDateTime.now().toString();
     }
 }
