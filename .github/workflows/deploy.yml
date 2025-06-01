@@ -1,22 +1,44 @@
-name: Build and Deploy
+name: Build and Validate
 
 on:
   push:
     branches:
       - main
-      - develop  # Adicionado para permitir deploy também na develop
+      - develop
 
 jobs:
-  build:
+  build-and-validate:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Build Docker image com variáveis de ambiente
-        env:
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+      - name: Determinar ambiente
+        id: env
         run: |
-          docker build -t consultalicitacao .
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_ENV
+            echo "FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_PROD }}" >> $GITHUB_ENV
+            echo "FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS_PROD }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=develop" >> $GITHUB_ENV
+            echo "FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID_DEV }}" >> $GITHUB_ENV
+            echo "FIREBASE_CREDENTIALS=${{ secrets.FIREBASE_CREDENTIALS_DEV }}" >> $GITHUB_ENV
+          fi
+
+      - name: Configurar Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Instalar dependências e construir com Maven
+        run: mvn clean package -DskipTests
+
+      - name: Build Docker image
+        run: |
+          echo "${{ env.FIREBASE_CREDENTIALS }}" > firebase-credentials.json
+          docker build -t consultalicitacao:${{ env.ENVIRONMENT }} \
+            --build-arg FIREBASE_PROJECT_ID=${{ env.FIREBASE_PROJECT_ID }} \
+            .
