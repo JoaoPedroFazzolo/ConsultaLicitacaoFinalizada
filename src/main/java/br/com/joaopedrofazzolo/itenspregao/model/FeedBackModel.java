@@ -15,6 +15,9 @@ public class FeedBackModel {
     @PropertyName("feedback")
     private String feedback;
 
+    @PropertyName("email")
+    private String email;
+
     @PropertyName("timestamp")
     private String timestamp;
 }

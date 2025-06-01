@@ -98,6 +98,9 @@ document.addEventListener("DOMContentLoaded", () => {
         btnFeedbackSubmit.textContent = "Enviando feedback, aguarde...";
 
         const avaliacaoInput = document.querySelector('input[name="avaliacao"]:checked');
+        const feedbackText = document.getElementById("feedback").value;
+        const emailValue = document.getElementById("email").value;
+
         if (!avaliacaoInput) {
             showModal("Erro", "Por favor, selecione uma avaliação de 1 a 5.");
             btnFeedbackSubmit.disabled = false;
@@ -105,9 +108,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailValue)) {
+            showModal("Erro", "Por favor, insira um e-mail válido.");
+            btnFeedbackSubmit.disabled = false;
+            btnFeedbackSubmit.textContent = textoOriginalBotaoFeedback;
+            return;
+        }
+
         const feedbackData = {
             avaliacao: parseInt(avaliacaoInput.value),
-            feedback: document.getElementById("feedback").value
+            feedback: feedbackText,
+            email: emailValue
         };
 
         try {
@@ -126,7 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const responseText = await response.text();
             showModal("Sucesso!", responseText || "Feedback enviado com sucesso!");
-
             formFeedback.reset();
 
         } catch (error) {
