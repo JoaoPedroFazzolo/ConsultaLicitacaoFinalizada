@@ -19,8 +19,8 @@
 
     <form id="formDownload">
         <div class="form-group">
-            <label for="uasg">UASG (ex: 120071)</label>
-            <input type="text" id="uasg" name="uasg" placeholder="Digite o código da UASG" required>
+            <label for="uasg">UASG</label>
+            <input type="text" id="uasg" name="uasg" placeholder="Digite o código da UASG ex: 120071" required>
         </div>
 
         <div class="form-group">
@@ -32,11 +32,42 @@
         </div>
 
         <div class="form-group">
-            <label for="processo">Nº do Processo (ex: 900412024)</label>
-            <input type="text" id="processo" name="processo" placeholder="Digite o número do processo" required>
+            <label for="processo">Nº do Processo</label>
+            <input type="text" id="processo" name="processo" placeholder="Digite o número do processo ex: 900412024" required>
         </div>
 
         <button type="submit" id="btnSubmit">Gerar Planilha Excel para SILOMS</button>
+    </form>
+    <br>
+    <h2>Envie seu Feedback</h2>
+    <form id="formFeedback">
+        <div class="form-group">
+            <label>Avaliação (1 a 5)</label>
+            <div class="radio-group">
+                <label class="radio-label">
+                    <input type="radio" name="avaliacao" value="1" required>1
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="avaliacao" value="2">2
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="avaliacao" value="3">3
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="avaliacao" value="4">4
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="avaliacao" value="5">5
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="feedback">Envie sugestões e feedback</label>
+            <textarea id="feedback" name="feedback" placeholder="Digite seu comentário" required rows="4"></textarea>
+        </div>
+
+        <button type="submit" id="btnFeedbackSubmit">Enviar Feedback</button>
     </form>
 
     <div class="support-section">
@@ -46,7 +77,7 @@
 
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <span class="close-button">×</span>
             <h2 id="modal-title"></h2>
             <p id="modal-message"></p>
             <div class="modal-buttons">

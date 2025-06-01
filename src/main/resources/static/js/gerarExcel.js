@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     const formDownload = document.getElementById("formDownload");
     const btnSubmit = document.getElementById("btnSubmit");
+    const formFeedback = document.getElementById("formFeedback");
+    const btnFeedbackSubmit = document.getElementById("btnFeedbackSubmit");
 
     const feedbackModal = document.getElementById("feedbackModal");
     const modalTitle = document.getElementById("modal-title");
@@ -8,22 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButtonModal = document.querySelector(".close-button");
     const modalOkButton = document.getElementById("modal-ok-button");
 
-    if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
-        console.error("Erro: Um ou mais elementos do formulário ou modal não foram encontrados no DOM.");
-        return;
-    }
-
-    const textoOriginalBotao = btnSubmit.textContent || "Gerar Excel";
-
-    if (!formDownload || !btnSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
+    if (!formDownload || !btnSubmit || !formFeedback || !btnFeedbackSubmit || !feedbackModal || !modalTitle || !modalMessage || !closeButtonModal || !modalOkButton) {
         console.error("Erro: Um ou mais elementos do DOM não foram encontrados.");
         return;
     }
 
+    const textoOriginalBotaoDownload = btnSubmit.textContent || "Gerar Planilha Excel para SILOMS";
+    const textoOriginalBotaoFeedback = btnFeedbackSubmit.textContent || "Enviar Feedback";
+
     const showModal = (title, message) => {
         modalTitle.textContent = title;
         modalMessage.textContent = message;
-
         feedbackModal.style.display = "block";
     };
 
@@ -51,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch(`/gerarExcel?${params.toString()}`, {
                 method: "GET"
-
             });
 
             if (!response.ok) {
@@ -83,14 +79,63 @@ document.addEventListener("DOMContentLoaded", () => {
             window.URL.revokeObjectURL(url);
 
             showModal("Sucesso!", "Sua planilha foi gerada e o download iniciado. Verifique sua pasta de downloads.");
+            formDownload.reset();
 
         } catch (error) {
-            console.error("Erro na operação:", error);
+            console.error("Erro na operação de download:", error);
             const errorMessage = error.message || "Erro desconhecido ao processar a solicitação.";
             showModal("Ocorreu um Erro", errorMessage);
         } finally {
             btnSubmit.disabled = false;
-            btnSubmit.textContent = textoOriginalBotao;
+            btnSubmit.textContent = textoOriginalBotaoDownload;
+        }
+    });
+
+    formFeedback.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        btnFeedbackSubmit.disabled = true;
+        btnFeedbackSubmit.textContent = "Enviando feedback, aguarde...";
+
+        const avaliacaoInput = document.querySelector('input[name="avaliacao"]:checked');
+        if (!avaliacaoInput) {
+            showModal("Erro", "Por favor, selecione uma avaliação de 1 a 5.");
+            btnFeedbackSubmit.disabled = false;
+            btnFeedbackSubmit.textContent = textoOriginalBotaoFeedback;
+            return;
+        }
+
+        const feedbackData = {
+            avaliacao: parseInt(avaliacaoInput.value),
+            feedback: document.getElementById("feedback").value
+        };
+
+        try {
+            const response = await fetch("/api/feedback", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(feedbackData)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText.length > 0 ? errorText : "Ocorreu um erro ao enviar o feedback. Por favor, tente novamente.");
+            }
+
+            const responseText = await response.text();
+            showModal("Sucesso!", responseText || "Feedback enviado com sucesso!");
+
+            formFeedback.reset();
+
+        } catch (error) {
+            console.error("Erro na operação de feedback:", error);
+            const errorMessage = error.message || "Erro desconhecido ao enviar o feedback.";
+            showModal("Ocorreu um Erro", errorMessage);
+        } finally {
+            btnFeedbackSubmit.disabled = false;
+            btnFeedbackSubmit.textContent = textoOriginalBotaoFeedback;
         }
     });
 });
