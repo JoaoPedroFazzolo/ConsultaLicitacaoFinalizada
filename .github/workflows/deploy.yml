@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Determinar ambiente
-        id: env
+        id: set-env
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "ENVIRONMENT=production" >> $GITHUB_ENV
@@ -33,12 +33,19 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Instalar dependências e construir com Maven
+      - name: Cache do Maven
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Build do projeto com Maven
         run: mvn clean package -DskipTests
 
       - name: Build Docker image
         run: |
-          echo "${{ env.FIREBASE_CREDENTIALS }}" > firebase-credentials.json
           docker build -t consultalicitacao:${{ env.ENVIRONMENT }} \
-            --build-arg FIREBASE_PROJECT_ID=${{ env.FIREBASE_PROJECT_ID }} \
+            --build-arg FIREBASE_PROJECT_ID="${{ env.FIREBASE_PROJECT_ID }}" \
+            --build-arg SPRING_PROFILES_ACTIVE="${{ env.ENVIRONMENT }}" \
             .

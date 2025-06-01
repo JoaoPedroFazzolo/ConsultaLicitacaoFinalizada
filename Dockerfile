@@ -4,7 +4,6 @@ LABEL maintainer="admfazzolo@gmail.com"
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
-RUN ls -l /app/target/
 
 FROM openjdk:17-slim
 WORKDIR /app
@@ -19,9 +18,14 @@ COPY --from=build /app/target/*.jar /app/consultalicitacao.jar
 ARG FIREBASE_PROJECT_ID
 ENV FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID
 
-COPY firebase-credentials.json /app/firebase-credentials.json
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/firebase-credentials.json
+ARG SPRING_PROFILES_ACTIVE=prod
+ENV SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
+
+ENV FIREBASE_CREDENTIALS=""
 
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "/app/consultalicitacao.jar", "--server.port=${PORT}"]
+ENTRYPOINT ["/bin/sh", "-c", "\
+  echo \"$FIREBASE_CREDENTIALS\" > /app/firebase.json && \
+  export GOOGLE_APPLICATION_CREDENTIALS=/app/firebase.json && \
+  java -jar /app/consultalicitacao.jar --server.port=$PORT \
+"]
