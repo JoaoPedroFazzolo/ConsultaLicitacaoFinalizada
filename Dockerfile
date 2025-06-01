@@ -14,4 +14,4 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/target/*.jar /app/consultalicitacao.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "-Dserver.port=${PORT}", "/app/consultalicitacao.jar"]
+ENTRYPOINT java -jar -Dserver.port=$PORT /app/consultalicitacao.jar
