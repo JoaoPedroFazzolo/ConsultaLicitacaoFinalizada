@@ -3,8 +3,9 @@ import { setupModal } from './modalHandler.js';
 const setupFeedbackForm = () => {
     const formFeedback = document.getElementById("formFeedback");
     const btnFeedbackSubmit = document.getElementById("btnFeedbackSubmit");
+    const emailInput = document.getElementById("email");
 
-    if (!formFeedback || !btnFeedbackSubmit) {
+    if (!formFeedback || !btnFeedbackSubmit || !emailInput) {
         console.error("Erro: Um ou mais elementos do formulário de feedback não foram encontrados.");
         return;
     }
@@ -30,7 +31,8 @@ const setupFeedbackForm = () => {
 
         const feedbackData = {
             avaliacao: parseInt(avaliacaoInput.value),
-            feedback: document.getElementById("feedback").value
+            feedback: document.getElementById("feedback").value,
+            email: emailInput.value
         };
 
         try {
