@@ -303,3 +303,7 @@ textarea:focus {
         gap: 10px;
     }
 }
+
+#modalAviso img {
+    margin-top: 10px;
+}

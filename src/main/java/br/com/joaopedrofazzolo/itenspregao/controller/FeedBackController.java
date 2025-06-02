@@ -36,8 +36,8 @@ public class FeedBackController {
             })
     @PostMapping
     public ResponseEntity<String> createFeedback(@Valid @RequestBody FeedBackDTO feedbackDTO) {
-        logger.info("Recebida solicitação para criar feedback: avaliacao={}, feedback={}",
-                feedbackDTO.getAvaliacao(), feedbackDTO.getFeedback());
+        logger.info("Recebida solicitação para criar feedback: avaliacao={}, feedback={}, email={}",
+                feedbackDTO.getAvaliacao(), feedbackDTO.getFeedback(), feedbackDTO.getEmail());
 
         try {
             String id = feedBackService.saveFeedback(feedbackDTO);

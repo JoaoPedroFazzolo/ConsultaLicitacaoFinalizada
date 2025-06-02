@@ -10,7 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/css/styles.css">
-    <script src="/js/gerarExcel.js" defer></script>
+    <script src="/js/modalHandler.js" type="module" defer></script>
+    <script src="/js/downloadForm.js" type="module" defer></script>
+    <script src="/js/feedbackForm.js" type="module" defer></script>
+    <script src="/js/placeholderHandler.js" type="module" defer></script>
+    <script src="/js/avisoModal.js" type="module" defer></script>
 </head>
 <body>
 
@@ -19,7 +23,7 @@
 
     <form id="formDownload">
         <div class="form-group">
-            <label for="uasg">UASG</label>
+            <label for="uasg">UASG*</label>
             <input type="text" id="uasg" name="uasg" placeholder="Digite o código da UASG ex: 120071" required>
         </div>
 
@@ -32,7 +36,7 @@
         </div>
 
         <div class="form-group">
-            <label for="processo">Nº do Processo</label>
+            <label for="processo">Nº do Processo*</label>
             <input type="text" id="processo" name="processo" placeholder="Digite o número do processo ex: 900412024" required>
         </div>
 
@@ -42,7 +46,7 @@
     <h2>Envie seu Feedback</h2>
     <form id="formFeedback">
         <div class="form-group">
-            <label>Avaliação (1 a 5)</label>
+            <label>Avaliação (1 a 5)*</label>
             <div class="radio-group">
                 <label class="radio-label">
                     <input type="radio" name="avaliacao" value="1" required>1
@@ -63,7 +67,12 @@
         </div>
 
         <div class="form-group">
-            <label for="feedback">Envie sugestões e feedback</label>
+            <label for="email">Seu e-mail</label>
+            <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
+        </div>
+
+        <div class="form-group">
+            <label for="feedback">Envie sugestões e feedback*</label>
             <textarea id="feedback" name="feedback" placeholder="Digite seu comentário" required rows="4"></textarea>
         </div>
 
@@ -85,6 +94,16 @@
             </div>
         </div>
     </div>
+
+    <div id="modalAviso" class="modal">
+        <div class="modal-content">
+            <img src="/image/avisocomprasgov.png" alt="Aviso Compras.gov.br" style="max-width: 100%; height: auto;">
+            <div class="modal-buttons">
+                <button id="modal-ok-button-aviso">OK</button>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <footer>
