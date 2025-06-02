@@ -23,12 +23,13 @@ public class FeedBackService {
 
     public String saveFeedback(FeedBackDTO feedbackDTO) {
         try {
-            logger.info("Convertendo FeedBackDTO para FeedBackModel: avaliacao={}, feedback={}",
-                    feedbackDTO.getAvaliacao(), feedbackDTO.getFeedback());
+            logger.info("Convertendo FeedBackDTO para FeedBackModel: avaliacao={}, feedback={}, email={}",
+                    feedbackDTO.getAvaliacao(), feedbackDTO.getFeedback(), feedbackDTO.getEmail());
 
             FeedBackModel feedbackModel = new FeedBackModel();
             feedbackModel.setAvaliacao(feedbackDTO.getAvaliacao());
             feedbackModel.setFeedback(feedbackDTO.getFeedback());
+            feedbackModel.setEmail(feedbackDTO.getEmail());
             feedbackModel.setTimestamp(LocalDateTime.now().format(formatter));
 
             String id = db.collection("feedbacks")
