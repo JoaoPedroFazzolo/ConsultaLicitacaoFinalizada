@@ -2,11 +2,7 @@ package br.com.joaopedrofazzolo.itenspregao.service;
 
 import br.com.joaopedrofazzolo.itenspregao.model.CompraItemModel;
 import br.com.joaopedrofazzolo.itenspregao.dto.CompraResponseDTO;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import org.apache.poi.ss.usermodel.RichTextString;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +19,6 @@ public class ExcelService {
     private static final Logger log = LoggerFactory.getLogger(ExcelService.class);
 
     public byte[] gerarExcel(CompraResponseDTO compraResponseDTO) throws IOException {
-
         if (compraResponseDTO == null) {
             log.error("Resposta da API nula. Não foi possível gerar a planilha Excel.");
             return null;
@@ -37,6 +32,10 @@ public class ExcelService {
         try {
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet();
+
+            CellStyle decimalStyle = workbook.createCellStyle();
+            DataFormat format = workbook.createDataFormat();
+            decimalStyle.setDataFormat(format.getFormat("0.0000"));
 
             Row headerRow = sheet.createRow(0);
             String[] headers = {
@@ -53,6 +52,7 @@ public class ExcelService {
             int rowNum = 1;
             for (CompraItemModel item : itens) {
                 Row row = sheet.createRow(rowNum++);
+
                 row.createCell(0).setCellValue("");
                 row.createCell(1).setCellValue(item.getNumeroItemPncp());
                 row.createCell(2).setCellValue("");
@@ -60,18 +60,25 @@ public class ExcelService {
                 row.createCell(4).setCellValue("");
                 row.createCell(5).setCellValue(item.getQuantidadeResultado() > 0 ? item.getQuantidadeResultado() : 0);
                 row.createCell(6).setCellValue("");
-                row.createCell(7).setCellValue(
-                        new BigDecimal(item.getValorUnitarioResultado()).setScale(4, RoundingMode.HALF_UP).doubleValue()
-                );
-                row.createCell(8).setCellValue(
-                        new BigDecimal(item.getValorTotalResultado()).setScale(4, RoundingMode.HALF_UP).doubleValue()
-                );
-                if (!(item.getSituacaoCompraItemNome().equals("Deserto") ||
-                        item.getSituacaoCompraItemNome().equals("Fracassado") ||
-                        item.getSituacaoCompraItemNome().equals("Em andamento") ||
-                        item.getSituacaoCompraItemNome().equals("Anulado/Revogado/Cancelado"))) {
+
+                Cell cellValorUnit = row.createCell(7);
+                BigDecimal valorUnitario = new BigDecimal(item.getValorUnitarioResultado()).setScale(4, RoundingMode.HALF_UP);
+                cellValorUnit.setCellValue(valorUnitario.doubleValue());
+                cellValorUnit.setCellStyle(decimalStyle);
+
+                Cell cellValorTotal = row.createCell(8);
+                BigDecimal valorTotal = new BigDecimal(item.getValorTotalResultado()).setScale(4, RoundingMode.HALF_UP);
+                cellValorTotal.setCellValue(valorTotal.doubleValue());
+                cellValorTotal.setCellStyle(decimalStyle);
+
+                String situacao = item.getSituacaoCompraItemNome();
+                if (!(situacao.equals("Deserto") ||
+                        situacao.equals("Fracassado") ||
+                        situacao.equals("Em andamento") ||
+                        situacao.equals("Anulado/Revogado/Cancelado"))) {
                     row.createCell(9).setCellValue(30);
                 }
+
                 row.createCell(10).setCellValue("");
                 row.createCell(11).setCellValue("");
                 row.createCell(12).setCellValue("");
@@ -86,7 +93,7 @@ public class ExcelService {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             workbook.write(byteArrayOutputStream);
             workbook.close();
-            log.info("planilha criado com sucesso");
+            log.info("Planilha criada com sucesso");
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             log.error("Erro ao gerar planilha Excel", e);

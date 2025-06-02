@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -30,7 +32,7 @@ public class FeedBackService {
             feedbackModel.setAvaliacao(feedbackDTO.getAvaliacao());
             feedbackModel.setFeedback(feedbackDTO.getFeedback());
             feedbackModel.setEmail(feedbackDTO.getEmail());
-            feedbackModel.setTimestamp(LocalDateTime.now().format(formatter));
+            feedbackModel.setTimestamp(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).format(formatter));
 
             String id = db.collection("feedbacks")
                     .add(feedbackModel)
