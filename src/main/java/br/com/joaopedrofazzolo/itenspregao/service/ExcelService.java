@@ -57,7 +57,7 @@ public class ExcelService {
                 row.createCell(1).setCellValue(item.getNumeroItemPncp());
                 row.createCell(2).setCellValue("");
                 row.createCell(3).setCellValue(item.getCodFornecedor() != null ? item.getCodFornecedor() : "Item deserto/fracassado ou sem retorno na base consultada");
-                row.createCell(4).setCellValue(item.getNomeFornecedor() != null ? item.getNomeFornecedor() : "");
+                row.createCell(4).setCellValue("");
                 row.createCell(5).setCellValue(item.getQuantidadeResultado() > 0 ? item.getQuantidadeResultado() : 0);
                 row.createCell(6).setCellValue("");
 
